@@ -6,7 +6,7 @@ const swaggerDefinition = {
   info: {
     title: "Library API",
     version: "1.0.0",
-    description: "CSE341 Library API - Books and Authors"
+    description: "CSE341 Library API"
   },
   servers: [
     {

@@ -14,7 +14,7 @@ const initDb = (callback) => {
 
   MongoClient.connect(process.env.MONGODB_URL)
     .then((client) => {
-      database = client.db("libraryAPI");
+      database = client.db();
       console.log("MongoDB Connected");
       callback(null, database);
     })
@@ -28,7 +28,4 @@ const getDb = () => {
   return database;
 };
 
-module.exports = {
-  initDb,
-  getDb
-};
+module.exports = { initDb, getDb };

@@ -1,14 +1,8 @@
 const express = require("express");
-
+const mongodb = require("../data/database");
 const router = express.Router();
+const ObjectId = require("mongodb").ObjectId;
 
-const booksController = require("../controllers/books");
-
-/*
-========================================
-GET ALL BOOKS
-========================================
-*/
 /**
  * @swagger
  * /books:
@@ -18,18 +12,23 @@ GET ALL BOOKS
  *       200:
  *         description: Success
  */
-router.get("/", booksController.getAllBooks);
+router.get("/", async (req, res) => {
+  try {
+    const db = mongodb.getDb();
 
-/*
-========================================
-GET SINGLE BOOK
-========================================
-*/
+    const result = await db.collection("books").find().toArray();
+
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 /**
  * @swagger
  * /books/{id}:
  *   get:
- *     summary: Get a single book
+ *     summary: Get one book
  *     parameters:
  *       - in: path
  *         name: id
@@ -40,35 +39,102 @@ GET SINGLE BOOK
  *       200:
  *         description: Success
  */
-router.get("/:id", booksController.getSingleBook);
+router.get("/:id", async (req, res) => {
+  try {
+    const db = mongodb.getDb();
 
-/*
-========================================
-CREATE BOOK
-========================================
-*/
+    const bookId = new ObjectId(req.params.id);
+
+    const result = await db
+      .collection("books")
+      .findOne({ _id: bookId });
+
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 /**
  * @swagger
  * /books:
  *   post:
- *     summary: Create a new book
+ *     summary: Create a book
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Book'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               author:
+ *                 type: string
+ *               genre:
+ *                 type: string
+ *               year:
+ *                 type: number
+ *               pages:
+ *                 type: number
+ *               language:
+ *                 type: string
+ *               available:
+ *                 type: boolean
  *     responses:
  *       201:
- *         description: Book created
+ *         description: Created
  */
-router.post("/", booksController.createBook);
+router.post("/", async (req, res) => {
+  try {
+    const {
+      title,
+      author,
+      genre,
+      year,
+      pages,
+      language,
+      available
+    } = req.body;
 
-/*
-========================================
-UPDATE BOOK
-========================================
-*/
+    if (
+      !title ||
+      !author ||
+      !genre ||
+      !year ||
+      !pages ||
+      !language ||
+      available === undefined
+    ) {
+      return res.status(400).json({
+        message: "All fields are required"
+      });
+    }
+
+    const db = mongodb.getDb();
+
+    const book = {
+      title,
+      author,
+      genre,
+      year,
+      pages,
+      language,
+      available
+    };
+
+    const response = await db
+      .collection("books")
+      .insertOne(book);
+
+    res.status(201).json({
+      id: response.insertedId
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 /**
  * @swagger
  * /books/{id}:
@@ -82,21 +148,61 @@ UPDATE BOOK
  *           type: string
  *     requestBody:
  *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Book'
  *     responses:
- *       200:
- *         description: Book updated
+ *       204:
+ *         description: Updated
  */
-router.put("/:id", booksController.updateBook);
+router.put("/:id", async (req, res) => {
+  try {
+    const {
+      title,
+      author,
+      genre,
+      year,
+      pages,
+      language,
+      available
+    } = req.body;
 
-/*
-========================================
-DELETE BOOK
-========================================
-*/
+    if (
+      !title ||
+      !author ||
+      !genre ||
+      !year ||
+      !pages ||
+      !language ||
+      available === undefined
+    ) {
+      return res.status(400).json({
+        message: "All fields are required"
+      });
+    }
+
+    const db = mongodb.getDb();
+
+    const bookId = new ObjectId(req.params.id);
+
+    const updatedBook = {
+      title,
+      author,
+      genre,
+      year,
+      pages,
+      language,
+      available
+    };
+
+    await db.collection("books").replaceOne(
+      { _id: bookId },
+      updatedBook
+    );
+
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 /**
  * @swagger
  * /books/{id}:
@@ -110,8 +216,22 @@ DELETE BOOK
  *           type: string
  *     responses:
  *       200:
- *         description: Book deleted
+ *         description: Deleted
  */
-router.delete("/:id", booksController.deleteBook);
+router.delete("/:id", async (req, res) => {
+  try {
+    const db = mongodb.getDb();
+
+    const bookId = new ObjectId(req.params.id);
+
+    await db.collection("books").deleteOne({
+      _id: bookId
+    });
+
+    res.status(200).send();
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 module.exports = router;
