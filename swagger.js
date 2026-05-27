@@ -10,7 +10,13 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: "http://localhost:3000"
+      url: "http://localhost:3000",
+      description: "Local server"
+    },
+    
+    {
+      url: "https://cse341-library-api-o2rw.onrender.com",
+      description: "Render server"
     }
   ]
 };
