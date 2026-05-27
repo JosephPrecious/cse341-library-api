@@ -1,34 +1,30 @@
 const express = require("express");
-const cors = require("cors");
 const mongodb = require("./data/database");
 const swaggerDocs = require("./swagger");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const contactsRoutes = require("./routes/contacts");
+const booksRoutes = require("./routes/books");
+const authorsRoutes = require("./routes/authors");
 
-// Middleware
-app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use("/contacts", contactsRoutes);
+app.use("/books", booksRoutes);
+app.use("/authors", authorsRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Contacts API Running");
+  res.send("Library API");
 });
 
-// Swagger
-swaggerDocs(app);
-
-// DB connection then start server
 mongodb.initDb((err) => {
   if (err) {
-    console.log("DB ERROR:", err);
+    console.log(err);
   } else {
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
   }
 });
+
+swaggerDocs(app);
