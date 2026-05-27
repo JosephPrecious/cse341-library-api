@@ -2,6 +2,7 @@ const express = require("express");
 const mongodb = require("../data/database");
 const router = express.Router();
 const ObjectId = require("mongodb").ObjectId;
+const { ensureAuth } = require("../middleware/auth");
 
 /**
  * @swagger
@@ -12,7 +13,7 @@ const ObjectId = require("mongodb").ObjectId;
  *       200:
  *         description: Success
  */
-router.get("/", async (req, res) => {
+router.get("/",  ensureAuth, async (req, res) => {
   try {
     const db = mongodb.getDb();
 
@@ -39,7 +40,7 @@ router.get("/", async (req, res) => {
  *       200:
  *         description: Success
  */
-router.get("/:id", async (req, res) => {
+router.get("/:id", ensureAuth, async (req, res) => {
   try {
     const db = mongodb.getDb();
 
@@ -85,7 +86,7 @@ router.get("/:id", async (req, res) => {
  *       201:
  *         description: Created
  */
-router.post("/", async (req, res) => {
+router.post("/", ensureAuth, async (req, res) => {
   try {
     const {
       title,
@@ -152,7 +153,7 @@ router.post("/", async (req, res) => {
  *       204:
  *         description: Updated
  */
-router.put("/:id", async (req, res) => {
+router.put("/:id", ensureAuth, async (req, res) => {
   try {
     const {
       title,
@@ -218,7 +219,7 @@ router.put("/:id", async (req, res) => {
  *       200:
  *         description: Deleted
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", ensureAuth, async (req, res) => {
   try {
     const db = mongodb.getDb();
 
