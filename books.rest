@@ -1,0 +1,57 @@
+### =====================================
+### GET ALL BOOKS
+### =====================================
+
+GET http://localhost:3000/books
+
+
+### =====================================
+### GET SINGLE BOOK
+### =====================================
+
+GET http://localhost:3000/books/6a16318ae5aa45d157926302
+
+
+### =====================================
+### CREATE BOOK
+### =====================================
+
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+  "title": "The Psychology of Money",
+  "author": "Morgan Housel",
+  "genre": "Finance",
+  "publishedYear": 2020,
+  "pages": 256,
+  "language": "English",
+  "available": true,
+  "rating": 5
+}
+
+
+### =====================================
+### UPDATE BOOK
+### =====================================
+
+PUT http://localhost:3000/books/6a16318ae5aa45d157926302
+Content-Type: application/json
+
+{
+  "title": "Deep Work",
+  "author": "Cal Newport",
+  "genre": "Productivity",
+  "publishedYear": 2016,
+  "pages": 304,
+  "language": "English",
+  "available": true,
+  "rating": 4
+}
+
+
+### =====================================
+### DELETE BOOK
+### =====================================
+
+DELETE http://localhost:3000/books/6a163202e5aa45d157926309

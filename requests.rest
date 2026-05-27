@@ -1,0 +1,25 @@
+### GET ALL AUTHORS
+GET http://localhost:3000/authors
+
+### CREATE AUTHOR
+POST http://localhost:3000/authors
+Content-Type: application/json
+
+{
+  "name": "J. K. Rowling",
+  "nationality": "British"
+}
+
+### GET ONE AUTHOR
+GET http://localhost:3000/authors/6a1631a5e5aa45d157926306
+### UPDATE AUTHOR
+PUT http://localhost:3000/authors/6a1631a5e5aa45d157926306
+Content-Type: application/json
+
+{
+  "name": "Updated Author",
+  "nationality": "UK"
+}
+
+### DELETE AUTHOR
+DELETE http://localhost:3000/authors/6a1631a5e5aa45d157926306
