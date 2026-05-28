@@ -60,13 +60,33 @@ router.get("/:id", ensureAuth, async (req, res) => {
  * @swagger
  * /authors:
  *   post:
- *     summary: Create an author
+ *     summary: Create a new author
+ *     tags: [Authors]
  *     requestBody:
  *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - nationality
+ *               - age
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               nationality:
+ *                 type: string
+ *               age:
+ *                 type: number
  *     responses:
  *       201:
- *         description: Created
+ *         description: Author created successfully
  */
+
 router.post("/", ensureAuth, async (req, res) => {
   try {
     const {
@@ -113,16 +133,38 @@ router.post("/", ensureAuth, async (req, res) => {
  * /authors/{id}:
  *   put:
  *     summary: Update an author
+ *     tags: [Authors]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - nationality
+ *               - age
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               nationality:
+ *                 type: string
+ *               age:
+ *                 type: number
  *     responses:
  *       204:
- *         description: Updated
+ *         description: Author updated successfully
  */
+
 router.put("/:id", ensureAuth, async (req, res) => {
   try {
     const {

@@ -141,6 +141,7 @@ router.post("/", ensureAuth, async (req, res) => {
  * /books/{id}:
  *   put:
  *     summary: Update a book
+ *     tags: [Books]
  *     parameters:
  *       - in: path
  *         name: id
@@ -149,9 +150,36 @@ router.post("/", ensureAuth, async (req, res) => {
  *           type: string
  *     requestBody:
  *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - author
+ *               - genre
+ *               - year
+ *               - pages
+ *               - language
+ *               - available
+ *             properties:
+ *               title:
+ *                 type: string
+ *               author:
+ *                 type: string
+ *               genre:
+ *                 type: string
+ *               year:
+ *                 type: number
+ *               pages:
+ *                 type: number
+ *               language:
+ *                 type: string
+ *               available:
+ *                 type: boolean
  *     responses:
  *       204:
- *         description: Updated
+ *         description: Book updated successfully
  */
 router.put("/:id", ensureAuth, async (req, res) => {
   try {
